@@ -16,11 +16,11 @@ func countWords(str string) int {
 }
 
 func task(id int, jobs <-chan string, results chan<- int) {
-	fmt.Println("I am id: ",id)
+
 	for n := range jobs {
-		fmt.Println(n, "asdfasdffdsaasdffdsa");
-		results <- 4
+		results <- countWords(n)
 	}
+
 }
 
 func main() {
@@ -40,9 +40,6 @@ func main() {
 		os.Exit(0)
 	}
 
-	fmt.Println(countWords("hello this is a string for the project nine"))
-
-	/*
 	//create buffered channels
 	//use the number of lines to determine buffer size (or don't use a buffer, idk)
 	jobs := make(chan string)
@@ -51,10 +48,22 @@ func main() {
 	//start tasks
 	for i := 0; i < numTasks; i++ {
 		go task(i, jobs, results)
-		fmt.Println("Starting task: ", i)
 	}
 
 	//add everything to the queue
 	//enqueue a special string to signal the end
-	*/
+	example := [...]string{"This is the first line",
+			"This is the second line of course",
+			"Naturally this is the third line, what else",
+			"It follows by extrapolation that this line represents the fourth in the continuum of lines"}
+
+	for i := 0; i < len(example); i++ {
+		jobs <- example[i]
+	}
+	close(jobs)
+
+	for i := range results {
+		fmt.Println(i)
+	}
+
 }
