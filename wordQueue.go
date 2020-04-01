@@ -3,19 +3,22 @@ package main
 import "fmt"
 import "os"
 import "strconv"
+import "strings"
 
 var numTasks int
 const signal = "0123456789qwertyuioplkjhgfdsazxcvbnm"
 
-func countWords(str string) {
+func countWords(str string) int {
 	//accepts a line
 	//count and return all the words in the line
+	s := strings.Split(str, " ")
+	return len(s)
 }
 
 func task(id int, jobs <-chan string, results chan<- int) {
 	fmt.Println("I am id: ",id)
 	for n := range jobs {
-		fmt.Println(n);
+		fmt.Println(n, "asdfasdffdsaasdffdsa");
 		results <- 4
 	}
 }
@@ -37,6 +40,9 @@ func main() {
 		os.Exit(0)
 	}
 
+	fmt.Println(countWords("hello this is a string for the project nine"))
+
+	/*
 	//create buffered channels
 	//use the number of lines to determine buffer size (or don't use a buffer, idk)
 	jobs := make(chan string)
@@ -50,4 +56,5 @@ func main() {
 
 	//add everything to the queue
 	//enqueue a special string to signal the end
+	*/
 }
