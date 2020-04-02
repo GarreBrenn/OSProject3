@@ -25,9 +25,12 @@ func countWords(str string) int {
 
 // the task that each thread will do 
 func task(id int, jobs <-chan string, results chan<- int) {
-
 	for n := range jobs {
-		results <- countWords(n)
+		
+		numWords := countWords(n)
+		results <- numWords
+		fmt.Println("Task Number: ", id)
+		fmt.Println(n, "\n")
 	}
 
 }
@@ -72,11 +75,13 @@ func main() {
 		log.Println(err)
 	}
 
+	fmt.Println()
+
 	numLines = len(list) // length of list aka number of lines in the input
 	
 
-	//create buffered channels
-	//use the number of lines to determine buffer size (or don't use a buffer, idk)
+	//create buffered channels (queues)
+	//use the number of lines to determine buffer size
 	jobs := make(chan string, numLines)
 	results := make(chan int, numLines)
 
@@ -92,8 +97,11 @@ func main() {
 	close(jobs)
 
 	// print results
+	var totalWords int
 	for i := 0; i < numLines; i++ {
-		fmt.Println(<-results)
+		totalWords = totalWords + <-results
 	}
+
+	fmt.Println("Total Word Count: ", totalWords)
 
 }
