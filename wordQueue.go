@@ -4,6 +4,8 @@ import "fmt"
 import "os"
 import "strconv"
 import "strings"
+import "bufio"
+import "log"
 
 func countWords(str string) int {
 	//accepts a line
@@ -40,11 +42,27 @@ func main() {
 		os.Exit(0)
 	}
 
-	example := [...]string{"This is the first line",
+	/*example := [...]string{"This is the first line",
 			"This is the second line of course",
 			"Naturally this is the third line, what else",
 			"It follows by extrapolation that this line represents the fourth in the continuum of lines"}
-	numLines = len(example)
+	numLines = len(example)*/
+
+	var list []string
+	// reads from a text file and seperates by line
+	scanner := bufio.NewScanner(os.Stdin)
+	for scanner.Scan() {
+
+		list = append(list, scanner.Text())
+	}
+
+
+	if err := scanner.Err(); err != nil {
+		log.Println(err)
+	}
+
+	numLines = len(list)
+	
 
 	//create buffered channels
 	//use the number of lines to determine buffer size (or don't use a buffer, idk)
@@ -58,7 +76,7 @@ func main() {
 
 	//add everything to the queue
 	for i := 0; i < numLines; i++ {
-		jobs <- example[i]
+		jobs <- list[i]
 	}
 	close(jobs)
 
